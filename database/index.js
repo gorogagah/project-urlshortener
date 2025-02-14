@@ -1,7 +1,7 @@
 const pgp = require('pg-promise')(/* options */)
 const db = pgp(`postgres://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_IP}:${process.env.DB_PORT}/${process.env.DB_NAME}`)
 
-exports.storeUrl = function(shortId, originalUrl){
+exports.addUrl = function(shortId, originalUrl){
     return db.one('INSERT INTO urls(short_id, original_url) VALUES($1, $2) RETURNING *', [shortId, originalUrl]);
 }
 
@@ -30,4 +30,8 @@ exports.getOriginalUrl = async function(shortId){
     }
 
     return "";
+}
+
+exports.addUser = async function(email, passwordHash){
+    return db.one('INSERT INTO users(email, password_hash) VALUES($1, $2) RETURNING *', [email, passwordHash]);
 }
