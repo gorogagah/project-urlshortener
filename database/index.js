@@ -35,3 +35,14 @@ exports.getOriginalUrl = async function(shortId){
 exports.addUser = async function(email, passwordHash){
     return db.one('INSERT INTO users(email, password_hash) VALUES($1, $2) RETURNING *', [email, passwordHash]);
 }
+
+exports.getUser = async function(email){
+    try{
+        const user = await db.one('SELECT * FROM users WHERE email = $1', [email]);
+        return user;
+    }catch(error){
+        console.log(`error on retrieving user: ${error}`);
+    }
+
+    return null;
+}
